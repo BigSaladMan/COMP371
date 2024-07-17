@@ -3,10 +3,19 @@
 #include <iostream>
 
 int main() {
-    // Creating Point objects
-    Point* p1 = new Point(1, 2, 0);
-    Point* p2 = new Point(4, 5, 0);
-    Point* p3 = new Point(6, 2, 0);
+    // User input for points
+    int x, y, z;
+    std::cout << "Enter coordinates for Point 1 (x y z): ";
+    std::cin >> x >> y >> z;
+    Point* p1 = new Point(x, y, z);
+
+    std::cout << "Enter coordinates for Point 2 (x y z): ";
+    std::cin >> x >> y >> z;
+    Point* p2 = new Point(x, y, z);
+
+    std::cout << "Enter coordinates for Point 3 (x y z): ";
+    std::cin >> x >> y >> z;
+    Point* p3 = new Point(x, y, z);
 
     // Create a Triangle object
     Triangle t(p1, p2, p3);
@@ -15,15 +24,18 @@ int main() {
     std::cout << "Initial triangle:" << std::endl;
     t.display();
 
-    // Translate the triangle
-    t.translate(2, 'x');
-    std::cout << "After translating 2 units along x-axis:" << std::endl;
+    // User input for translation
+    int d;
+    char axis;
+    std::cout << "Enter distance to translate and axis (d axis): ";
+    std::cin >> d >> axis;
+    t.translate(d, axis);
+    std::cout << "After translating " << d << " units along " << axis << "-axis:" << std::endl;
     t.display();
 
     // Calculate the area
     double area = t.calcArea();
     std::cout << "Area of the triangle: " << area << std::endl;
 
-    
     return 0;
 }

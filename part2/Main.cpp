@@ -1,40 +1,29 @@
-// main.cpp
 #include "point.h"
+#include "triangle.h"
 #include <iostream>
 
 int main() {
-    // Creating a Point object
-    Point p1(1, 2, 3);
+    // Creating Point objects
+    Point* p1 = new Point(1, 2, 0);
+    Point* p2 = new Point(4, 5, 0);
+    Point* p3 = new Point(6, 2, 0);
 
-    // Display 
-    std::cout << "Initial coordinates: ";
-    p1.display();
+    // Create a Triangle object
+    Triangle t(p1, p2, p3);
+    
+    // Display initial triangle
+    std::cout << "Initial triangle:" << std::endl;
+    t.display();
 
-    // Translate the point
-    if (p1.translate(5, 'x') == 0) {
-        std::cout << "After translating 5 units along x-axis: ";
-        p1.display();
-    }
+    // Translate the triangle
+    t.translate(2, 'x');
+    std::cout << "After translating 2 units along x-axis:" << std::endl;
+    t.display();
 
-    if (p1.translate(3, 'y') == 0) {
-        std::cout << "After translating 3 units along y-axis: ";
-        p1.display();
-    }
+    // Calculate the area
+    double area = t.calcArea();
+    std::cout << "Area of the triangle: " << area << std::endl;
 
-    if (p1.translate(-2, 'z') == -1) {
-        std::cout << "After translating -2 units along z-axis: ";
-        p1.display();
-    }
-
-    // this is to translate invalid axis
-    if (p1.translate(4, 'a') == -1) {
-        std::cout << "Attempt to translate 4 units along invalid axis." << std::endl;
-    }
-
-    // Translate with invalid distance
-    if (p1.translate(-4, 'x') == -1) {
-        std::cout << "Attempt to translate -4 units along x-axis." << std::endl;
-    }
-
+    
     return 0;
 }

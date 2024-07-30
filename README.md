@@ -1,5 +1,5 @@
-# COMP371-A1
-This will contain 2 different solutions/projects, one for part1 and one for part2
+# COMP371
+This will contain all assignments going forward
 Teamtates:
 yves chuenmogne 40129773
 Ahmed Enani 26721281

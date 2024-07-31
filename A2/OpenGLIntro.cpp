@@ -17,21 +17,21 @@ float rotation = 0.0f;
 float scale = 1.0f;
 
 void processInput(GLFWwindow* window) {
-    const float translationDistance = 0.1f; // Distance for translation
-    const float rotationAngle = glm::radians(30.0f); // Rotation angle (30 degrees in radians)
-    const float scaleFactor = 0.05f; // Reduced scaling factor
+    const float translationDistance = 0.01f; // Distance for translation, 0.1f units
+    const float rotationAngle = glm::radians(5.0f); // Rotation angle (5 degrees in radians)
+    const float scaleFactor = 0.01f; // Reduced scaling factor, 0.1f units
 
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true); // Close the window when ESC is pressed
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        translation.y += translationDistance; // Translate up
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        translation.y += translationDistance; // Translate up
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         translation.y -= translationDistance; // Translate down
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        translation.x -= translationDistance; // Translate left
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        translation.x -= translationDistance; // Translate left
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         translation.x += translationDistance; // Translate right
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
         rotation += rotationAngle; // Rotate anticlockwise
@@ -61,7 +61,6 @@ int main() {
     // Main loop
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
-
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT);
 

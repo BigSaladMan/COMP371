@@ -135,6 +135,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="OpenGLIntro.cpp" />
+    <ClCompile Include="rendering.cpp" />
+    <ClCompile Include="transformations.cpp" />
+    <ClCompile Include="window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="rendering.h" />
+    <ClInclude Include="transformations.h" />
+    <ClInclude Include="window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

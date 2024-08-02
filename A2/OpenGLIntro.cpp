@@ -25,13 +25,13 @@ void processInput(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true); // Close the window when ESC is pressed
 
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        translation.y += translationDistance; // Translate up
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        translation.y += translationDistance; // Translate up
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         translation.y -= translationDistance; // Translate down
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        translation.x -= translationDistance; // Translate left
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        translation.x -= translationDistance; // Translate left
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         translation.x += translationDistance; // Translate right
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
         rotation += rotationAngle; // Rotate anticlockwise

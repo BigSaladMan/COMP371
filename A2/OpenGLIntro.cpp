@@ -8,9 +8,6 @@
 #include "transformations.h"
 #include <iostream>
 
-
-using namespace std;
-
 // Initialize variables for transformations
 glm::vec3 translation(0.0f, 0.0f, 0.0f);
 float rotation = 0.0f;

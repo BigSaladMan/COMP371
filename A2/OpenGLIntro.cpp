@@ -18,7 +18,7 @@ float scale = 1.0f;
 
 void processInput(GLFWwindow* window) {
     const float translationDistance = 0.01f; // Distance for translation, 0.1f units
-    const float rotationAngle = glm::radians(5.0f); // Rotation angle (5 degrees in radians)
+    const float rotationAngle = glm::radians(0.52f); // Rotation angle (30 degrees in radians)
     const float scaleFactor = 0.01f; // Reduced scaling factor, 0.1f units
 
 

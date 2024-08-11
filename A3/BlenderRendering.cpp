@@ -7,6 +7,8 @@
 #include "rendering.h"
 #include "transformations.h"
 #include <iostream>
+#include "tiny_obj_loader.h"
+
 
 // Initialize variables for transformations
 glm::vec3 translation(0.0f, 0.0f, 0.0f);
@@ -53,7 +55,9 @@ int main() {
 
     // Set up shaders, VAO, and VBO
     GLuint shaderProgram = createShaderProgram();
-    GLuint VAO = createTriangleVAO();
+    //GLuint VAO = createTriangleVAO();
+    Mesh bottlemesh = loadOBJModel("Bottle-Z.obj");
+
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {
@@ -75,8 +79,9 @@ int main() {
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
         // Render the triangle
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindVertexArray(bottlemesh.VAO);
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(bottlemesh.indexCount), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
         // Swap buffers and poll IO events
         glfwSwapBuffers(window);
@@ -84,7 +89,9 @@ int main() {
     }
 
     // Clean up
-    glDeleteVertexArrays(1, &VAO);
+    glDeleteVertexArrays(1, &bottlemesh.VAO);
+    glDeleteBuffers(1, &bottlemesh.VBO);
+    glDeleteBuffers(1, &bottlemesh.EBO);
     glDeleteProgram(shaderProgram);
     glfwTerminate();
 

@@ -110,6 +110,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,6 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BlenderRendering.cpp" />
+    <ClCompile Include="LoadObj.cpp" />
     <ClCompile Include="rendering.cpp" />
     <ClCompile Include="transformations.cpp" />
     <ClCompile Include="window.cpp" />

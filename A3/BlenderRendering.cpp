@@ -57,6 +57,7 @@ int main() {
     GLuint shaderProgram = createShaderProgram();
     //GLuint VAO = createTriangleVAO();
     Mesh bottlemesh = loadOBJModel("Bottle-Z.obj");
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 
     // Main loop

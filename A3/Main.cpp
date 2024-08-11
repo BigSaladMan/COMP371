@@ -1,8 +1,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "window.h"
 #include "rendering.h"
 #include "transformations.h"
@@ -19,12 +19,12 @@ std::vector<float> vertices;
 std::vector<unsigned int> indices;
 
 void processInput(GLFWwindow* window) {
-    const float translationDistance = 0.01f; // Distance for translation, 0.01f units
-    const float rotationAngle = glm::radians(0.52f); // Rotation angle (0.52 degrees in radians)
-    const float scaleFactor = 0.01f; // Scaling factor, 0.01f units
+    const float translationDistance = 0.01f; // Distance for translation
+    const float rotationAngle = glm::radians(0.52f); // Rotation angle in radians
+    const float scaleFactor = 0.01f; // Scaling factor
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true); // Close the window when ESC is pressed
+        glfwSetWindowShouldClose(window, true); // Close window when ESC is pressed
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         translation.y += translationDistance; // Translate up
@@ -66,12 +66,12 @@ void loadModel(const std::string& path) {
 
     // Loop over shapes
     for (size_t s = 0; s < shapes.size(); s++) {
-        // Loop over faces (polygon)
+        // Loop over faces (polygons)
         size_t index_offset = 0;
         for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
             int fv = shapes[s].mesh.num_face_vertices[f];
 
-            // Loop over vertices in the face.
+            // Loop over vertices in the face
             for (size_t v = 0; v < fv; v++) {
                 // Access to vertex
                 tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
@@ -81,15 +81,14 @@ void loadModel(const std::string& path) {
                 vertices.push_back(vx);
                 vertices.push_back(vy);
                 vertices.push_back(vz);
-                indices.push_back(indices.size());
+                indices.push_back(static_cast<unsigned int>(indices.size()));
             }
             index_offset += fv;
         }
     }
 }
 
-int main()
-{
+int main() {
     // Initialize GLFW and create a window
     GLFWwindow* window = initializeWindow(800, 600, "Assignment");
 
@@ -106,15 +105,19 @@ int main()
     // Set up shaders
     GLuint shaderProgram = createShaderProgram();
 
-    // Set up VAO and VBO for the OBJ model
-    GLuint VBO, VAO;
+    // Set up VAO, VBO, and EBO for the OBJ model
+    GLuint VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
 
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
     // Position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -145,7 +148,7 @@ int main()
 
         // Render the OBJ model
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
 
         // Swap buffers and poll IO events
         glfwSwapBuffers(window);
@@ -155,6 +158,7 @@ int main()
     // Clean up
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
     glDeleteProgram(shaderProgram);
     glfwTerminate();
 

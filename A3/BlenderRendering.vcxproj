@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{977d7c2d-32a0-415c-aff9-0ebeddfaaf2e}</ProjectGuid>
-    <RootNamespace>BlenderRending</RootNamespace>
+    <ProjectGuid>{ce244abb-b917-4fd1-8f92-7b2ebeaa841e}</ProjectGuid>
+    <RootNamespace>BlenderRendering</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -134,7 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BlenderRending.cpp" />
+    <ClCompile Include="BlenderRendering.cpp" />
     <ClCompile Include="rendering.cpp" />
     <ClCompile Include="transformations.cpp" />
     <ClCompile Include="window.cpp" />

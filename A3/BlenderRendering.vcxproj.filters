@@ -15,27 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BlenderRending.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="transformations.cpp">
+    <ClCompile Include="BlenderRendering.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="rendering.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="transformations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="window.h">
+    <ClInclude Include="rendering.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="transformations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering.h">
+    <ClInclude Include="window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

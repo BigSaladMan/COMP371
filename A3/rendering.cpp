@@ -1,41 +1,108 @@
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include "transformations.h" // For transformation functions
-#include "blender_rendering.h" 
+#include <GL/glew.h>
+#include <iostream>
+#include "rendering.h"
 
-// Function to apply transformations and render the mesh
-void renderMesh(const Mesh& mesh, GLuint shaderProgram) {
-    // Bind the shader program
-    glUseProgram(shaderProgram);
+const char* vertexShaderSource = R"(
+#version 330 core
+layout(location = 0) in vec3 aPos;
+layout(location = 1) in vec3 aColor;
+out vec3 ourColor;
+uniform mat4 model;
+void main()
+{
+    gl_Position = model * vec4(aPos, 1.0);
+    ourColor = aColor;
+}
+)";
 
-    // Create transformation matrices using transformation utility functions
-    glm::mat4 model = glm::mat4(1.0f); // Identity matrix
+const char* fragmentShaderSource = R"(
+#version 330 core
+out vec4 FragColor;
+in vec3 ourColor;
+void main()
+{
+    FragColor = vec4(ourColor, 1.0);
+}
+)";
 
-    // Apply translation
-    model = createTranslationMatrix(glm::vec3(0.0f, 0.0f, -5.0f)); // Translate 5 units along z-axis
+GLuint createShaderProgram() {
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
+    checkCompileErrors(vertexShader, "VERTEX");
 
-    // Apply rotation
-    model = createRotationMatrix(glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Rotate 45 degrees around y-axis
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+    checkCompileErrors(fragmentShader, "FRAGMENT");
 
-    // Apply scaling
-    model = createScalingMatrix(1.0f); // Uniform scaling by factor of 1
+    GLuint shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+    checkCompileErrors(shaderProgram, "PROGRAM");
 
-    // Pass the matrices to the shader
-    GLint modelLoc = glGetUniformLocation(shaderProgram, "model");
-    GLint viewLoc = glGetUniformLocation(shaderProgram, "view");
-    GLint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
 
-    // Assuming view and projection matrices are set elsewhere
-    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    return shaderProgram;
+}
 
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+GLuint createTriangleVAO() {
+    float vertices[] = {
+        // positions         // colors
+         0.0f,  0.3f, 0.0f,  1.0f, 0.0f, 0.0f, // top
+        -0.3f, -0.3f, 0.0f,  0.0f, 1.0f, 0.0f, // bottom left
+         0.3f, -0.3f, 0.0f,  0.0f, 0.0f, 1.0f  // bottom right
+    };
 
-    // Bind the VAO and draw the mesh
-    glBindVertexArray(mesh.VAO);
-    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh.indices.size()), GL_UNSIGNED_INT, 0);
+    unsigned int indices[] = {
+        0, 1, 2 // indices for the triangle
+    };
+
+    GLuint VAO, VBO, EBO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    // Position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    // Color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    // Unbind VAO and VBO
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    return VAO;
+}
+
+void checkCompileErrors(GLuint shader, std::string type) {
+    GLint success;
+    GLchar infoLog[1024];
+    if (type != "PROGRAM") {
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+        if (!success) {
+            glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+            std::cerr << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+        }
+    }
+    else {
+        glGetProgramiv(shader, GL_LINK_STATUS, &success);
+        if (!success) {
+            glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+            std::cerr << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+        }
+    }
 }
